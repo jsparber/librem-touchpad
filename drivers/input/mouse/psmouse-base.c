@@ -32,6 +32,7 @@
 #include "lifebook.h"
 #include "trackpoint.h"
 #include "touchkit_ps2.h"
+#include "byd.h"
 #include "elantech.h"
 #include "sentelic.h"
 #include "cypress_ps2.h"
@@ -904,6 +905,19 @@ static int psmouse_extensions(struct psmouse *psmouse,
 		max_proto = PSMOUSE_IMEX;
 	}
 
+/*
+ * Try BYD Touch Pad.
+ */
+	if (max_proto > PSMOUSE_IMEX &&
+	    psmouse_do_detect(byd_detect, psmouse, set_properties) == 0) {
+		if (!set_properties || byd_init(psmouse) == 0)
+			return PSMOUSE_BYD;
+/*
+ * Init failed, try basic relative protocols
+ */
+		max_proto = PSMOUSE_IMEX;
+	}
+
 	if (max_proto > PSMOUSE_IMEX) {
 		if (psmouse_do_detect(genius_detect,
 				      psmouse, set_properties) == 0)
@@ -1130,6 +1144,15 @@ static const struct psmouse_protocol psmouse_protocols[] = {
 		.init		= vmmouse_init,
 	},
 #endif
+#ifdef CONFIG_MOUSE_BYD
+	{
+		.type		= PSMOUSE_BYD,
+		.name		= "BYDPS/2",
+		.alias		= "byd",
+		.detect		= byd_detect,
+	},
+#endif
+
 	{
 		.type		= PSMOUSE_AUTO,
 		.name		= "auto",

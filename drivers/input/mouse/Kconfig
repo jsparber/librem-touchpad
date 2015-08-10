@@ -161,6 +161,15 @@ config MOUSE_PS2_VMMOUSE
 
 	  If unsure, say N.
 
+config MOUSE_PS2_BYD
+	bool "BYD PS/2 protocol extension"
+	depends on MOUSE_PS2
+	help
+	  Say Y here if you have a BYD PS/2 touchpad
+	  connected to your system.
+
+	  If unsure, say N.
+
 config MOUSE_SERIAL
 	tristate "Serial mouse"
 	select SERIO
