@@ -10,9 +10,6 @@
 
 #ifndef __BYD_H
 #define __BYD_H
-#define CONFIG_MOUSE_BYD
-#define CONFIG_MOUSE_BYD
-#define CONFIG_MOUSE_BYD
 
 #ifdef CONFIG_MOUSE_BYD
 int byd_detect(struct psmouse *psmouse, bool set_properties);
