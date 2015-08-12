@@ -32,7 +32,7 @@
 #include "psmouse.h"
 #include "byd.h"
 
-#define BYD_MODEL_ID_LEN        3
+#define BYD_MODEL_ID_LEN        2
 #define BYD_CMD_PAIR(c)		((1 << 12) | (c))
 #define BYD_CMD_PAIR_R(r,c)	((1 << 12) | (r << 8) | (c))
 
@@ -42,7 +42,7 @@ struct byd_model_info {
 };
 
 static struct byd_model_info byd_model_data[] = {
-	{ "BTP10463", { 0x00, 0x03, 0x64 } }
+	{ "BTP10463", { 0x03, 0x64 } }
 };
 
 static const unsigned char byd_init_param[] = {
@@ -165,6 +165,7 @@ int byd_init(struct psmouse *psmouse)
 	int i = 0;
 
 	/* it needs to be initialised like an intellimouse to get 4-byte packets */
+	psmouse_reset(psmouse);
 	param[0] = 200;
 	ps2_command(ps2dev, param, PSMOUSE_CMD_SETRATE);
 	param[0] = 100;
@@ -301,9 +302,14 @@ int byd_detect(struct psmouse *psmouse, bool set_properties)
 	psmouse_dbg(psmouse, "detect: model id: %x %x %x\n",
 			param[0], param[1], param[2]);
 
-	/* match the device */
+	/*
+	 * match the device - the first byte, param[0], appears to be set
+	 * to some unknown value based on the state of the mouse and cannot
+	 * be used for identification after suspend.
+	 */
 	for (i = 0; i < ARRAY_SIZE(byd_model_data); i++) {
-		if (!memcmp(param, &byd_model_data[i].id, BYD_MODEL_ID_LEN))
+		if (!memcmp(param + 1, &byd_model_data[i].id,
+				 BYD_MODEL_ID_LEN))
 			break;
 	}
 	
