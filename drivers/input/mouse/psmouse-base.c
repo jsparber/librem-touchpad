@@ -1144,7 +1144,7 @@ static const struct psmouse_protocol psmouse_protocols[] = {
 		.init		= vmmouse_init,
 	},
 #endif
-#ifdef CONFIG_MOUSE_BYD
+#ifdef CONFIG_MOUSE_PS2_BYD
 	{
 		.type		= PSMOUSE_BYD,
 		.name		= "BYDPS/2",
