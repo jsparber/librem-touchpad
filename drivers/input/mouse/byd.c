@@ -2,6 +2,7 @@
  * byd.c --- Driver for BYD BTP-10463
  *
  * Copyright (C) 2015, Tai Chi Minh Ralph Eastwood
+ * Copyright (C) 2015, Martin Wimpress
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -53,23 +54,23 @@ static const unsigned char byd_init_param[] = {
 	0xd5, 0x01,
 	0xd7, 0x03,
 	0xd8, 0x04,
-	0xda, 0x03, 
+	0xda, 0x03,
 	0xdb, 0x02,
 	0xe4, 0x05,
 	0xd6, 0x01,
-	0xde, 0x04, 
+	0xde, 0x04,
 	0xe3, 0x01,
 	0xcf, 0x00,
 	0xd2, 0x03,
-	0xe5, 0x04, 
+	0xe5, 0x04,
 	0xd9, 0x02,
 	0xd9, 0x07,
 	0xdc, 0x03,
-	0xdd, 0x03, 
+	0xdd, 0x03,
 	0xdf, 0x03,
 	0xe1, 0x03,
 	0xd1, 0x00,
-	0xce, 0x00, 
+	0xce, 0x00,
 	0xcc, 0x00,
 	0xe0, 0x00
 };
@@ -206,7 +207,7 @@ int byd_init(struct psmouse *psmouse)
 		error = -EIO;
 		goto init_fail;
 	}
-	
+
 #ifdef DEBUG
 	psmouse_dbg(psmouse, "detect: magic %x %x %x %x\n",
 			param[0], param[1], param[2], param[3]);
@@ -245,7 +246,7 @@ int byd_init(struct psmouse *psmouse)
 		priv->ext_lookup[byd_ext_cmd_data[i].code] = i & 0xff;
 	}
 	psmouse->private = priv;
-	
+
 	/* exit command mode */
 	param[0] = 0x01;
 	if (ps2_command(ps2dev, param, BYD_CMD_PAIR(0xe2))) {
@@ -277,7 +278,7 @@ static int byd_reconnect(struct psmouse *psmouse)
 
 	if (byd_init(psmouse))
 		return -1;
-	
+
 	return 0;
 }
 
@@ -312,7 +313,7 @@ int byd_detect(struct psmouse *psmouse, bool set_properties)
 				 BYD_MODEL_ID_LEN))
 			break;
 	}
-	
+
 	/* no match found */
 	if (i == ARRAY_SIZE(byd_model_data)) {
 		psmouse_dbg(psmouse, "detect: no match found\n");
@@ -321,10 +322,10 @@ int byd_detect(struct psmouse *psmouse, bool set_properties)
 		psmouse_dbg(psmouse, "detect: matched %s\n",
 				byd_model_data[i].name);
 	}
-			
+
 	if (set_properties) {
 		__set_bit(BTN_SIDE, psmouse->dev->keybit);
-		
+
 		__set_bit(BTN_FORWARD, psmouse->dev->keybit);
 		__set_bit(BTN_BACK, psmouse->dev->keybit);
 		__set_bit(BTN_TASK, psmouse->dev->keybit);
