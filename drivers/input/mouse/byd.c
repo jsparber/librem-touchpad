@@ -52,7 +52,7 @@ static const unsigned char byd_init_param[] = {
 
 	0xd3, 0x01,  // set right-handedness
 	0xd0, 0x00,  // reset button
-	0xd0, 0x07,  // send click in both corners as separate gestures
+	0xd0, 0x06,  // send click in both corners as separate gestures
 	0xd4, 0x02,  // disable tapping.
 	0xd5, 0x03,  // tap and drag off
 	0xd7, 0x04,  // edge scrolling off
